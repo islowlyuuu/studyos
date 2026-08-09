@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# 密钥与环境变量
+.env
+
+# 运行时上传的文件
+backend/data/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+
+# 系统文件
+.DS_Store
+Thumbs.db
