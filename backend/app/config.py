@@ -41,6 +41,13 @@ class Settings(BaseSettings):
     vector_top_k: int = 8
     min_similarity: float = 0.4  # 低于此相似度视为证据不足
     cache_ttl_seconds: int = 3600
+    score_threshold: float = 0.6  # 批改低于此分视为未通过，标记薄弱
+
+    # 成本估算（元 / 百万 token），按 DeepSeek 约价
+    cost_per_1m_input: float = 2.0
+    cost_per_1m_output: float = 8.0
+
+    eval_top_k: int = 8  # 评测用检索深度
 
     max_agent_steps: int = 8
     agent_timeout_seconds: int = 60

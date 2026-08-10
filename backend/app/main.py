@@ -1,10 +1,11 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import select, text
 
 from app import models  # noqa: F401  确保建表时模型已注册
-from app.api import documents, qa
+from app.api import agent, documents, practice, qa
 from app.config import settings
 from app.database import Base, SessionLocal, engine
 
@@ -23,8 +24,17 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # v1 单机开发环境，后续收紧
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(documents.router)
 app.include_router(qa.router)
+app.include_router(practice.router)
+app.include_router(agent.router)
 
 
 @app.get("/health")

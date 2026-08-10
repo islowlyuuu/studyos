@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "question": "RAG（检索增强生成）的完整流程是什么？",
+    "expected_source_keywords": ["RAG", "检索"],
+    "expected_knowledge_points": ["RAG", "检索增强生成"],
+    "key_answer_points": ["检索", "上下文", "来源", "生成"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 2,
+    "question": "为什么 RAG 能减少大模型的幻觉？",
+    "expected_source_keywords": ["幻觉", "RAG"],
+    "expected_knowledge_points": ["幻觉", "RAG"],
+    "key_answer_points": ["依据", "来源", "证据不足"],
+    "forbidden_conclusions": ["RAG 完全消除幻觉"]
+  },
+  {
+    "id": 3,
+    "question": "什么是 Embedding？为什么语义相近的文本向量也相近？",
+    "expected_source_keywords": ["Embedding", "向量"],
+    "expected_knowledge_points": ["Embedding", "向量"],
+    "key_answer_points": ["向量", "语义", "维度"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 4,
+    "question": "如何计算两个向量的余弦相似度？",
+    "expected_source_keywords": ["余弦", "相似度"],
+    "expected_knowledge_points": ["余弦相似度", "向量"],
+    "key_answer_points": ["夹角", "点积", "归一化"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 5,
+    "question": "长文档为什么要分块（Chunking）？",
+    "expected_source_keywords": ["分块", "Chunk"],
+    "expected_knowledge_points": ["分块", "上下文"],
+    "key_answer_points": ["上下文", "语义", "检索粒度"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 6,
+    "question": "标题感知分块相比固定长度分块有什么好处？",
+    "expected_source_keywords": ["标题", "分块"],
+    "expected_knowledge_points": ["分块", "标题感知"],
+    "key_answer_points": ["语义单位", "章节", "来源追溯"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 7,
+    "question": "pgvector 是做什么的？",
+    "expected_source_keywords": ["pgvector", "向量"],
+    "expected_knowledge_points": ["pgvector", "向量检索"],
+    "key_answer_points": ["PostgreSQL", "向量检索", "扩展"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 8,
+    "question": "top-K 向量检索是怎么工作的？",
+    "expected_source_keywords": ["top-K", "检索"],
+    "expected_knowledge_points": ["向量检索", "top-K"],
+    "key_answer_points": ["相似度", "排序", "取前K"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 9,
+    "question": "什么是 SSE 流式响应？和普通 HTTP 请求有什么区别？",
+    "expected_source_keywords": ["SSE", "流式"],
+    "expected_knowledge_points": ["SSE", "流式输出"],
+    "key_answer_points": ["text/event-stream", "逐段", "实时"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 10,
+    "question": "什么是首 Token 延迟（TTFT）？为什么流式能降低它？",
+    "expected_source_keywords": ["首 Token", "延迟"],
+    "expected_knowledge_points": ["首Token延迟", "流式"],
+    "key_answer_points": ["第一个token", "边生成边推", "用户体验"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 11,
+    "question": "LLM 的 token 是什么？为什么计费按 token 算？",
+    "expected_source_keywords": ["token", "计费"],
+    "expected_knowledge_points": ["token", "成本"],
+    "key_answer_points": ["分词", "输入输出", "成本"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 12,
+    "question": "Redis 队列解决什么问题？为什么文档解析要异步？",
+    "expected_source_keywords": ["Redis", "异步", "队列"],
+    "expected_knowledge_points": ["Redis", "异步任务"],
+    "key_answer_points": ["耗时", "接口秒回", "worker"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 13,
+    "question": "为什么 LLM 响应要加缓存？缓存要注意什么？",
+    "expected_source_keywords": ["缓存", "TTL"],
+    "expected_knowledge_points": ["缓存", "TTL"],
+    "key_answer_points": ["成本", "TTL", "过时"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 14,
+    "question": "什么是 Function Calling？和普通的文本输出有什么不同？",
+    "expected_source_keywords": ["Function Calling", "工具"],
+    "expected_knowledge_points": ["Function Calling", "工具调用"],
+    "key_answer_points": ["结构化参数", "工具", "JSON Schema"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 15,
+    "question": "为什么 Agent 工具调用要设置最大步数和超时？",
+    "expected_source_keywords": ["最大步数", "超时"],
+    "expected_knowledge_points": ["Agent", "安全边界"],
+    "key_answer_points": ["失控循环", "终止", "中间结果"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 16,
+    "question": "什么是 JSON Schema？结构化输出为什么用它？",
+    "expected_source_keywords": ["JSON Schema", "结构化"],
+    "expected_knowledge_points": ["JSON Schema", "结构化输出"],
+    "key_answer_points": ["约束", "字段", "校验"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 17,
+    "question": "简述 Transformer 中的自注意力机制的作用。",
+    "expected_source_keywords": ["自注意力", "Transformer"],
+    "expected_knowledge_points": ["Transformer", "自注意力"],
+    "key_answer_points": ["词与词", "依赖", "权重"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 18,
+    "question": "什么是提示词工程？system prompt 和 user prompt 有什么区别？",
+    "expected_source_keywords": ["提示词", "system"],
+    "expected_knowledge_points": ["提示词工程", "prompt"],
+    "key_answer_points": ["system", "约束", "角色"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 19,
+    "question": "Recall@K 和 MRR 分别度量检索的什么？",
+    "expected_source_keywords": ["Recall@K", "MRR"],
+    "expected_knowledge_points": ["评测", "Recall@K", "MRR"],
+    "key_answer_points": ["召回", "排序", "首个相关"],
+    "forbidden_conclusions": []
+  },
+  {
+    "id": 20,
+    "question": "批量向量化为什么比逐个调用更快？",
+    "expected_source_keywords": ["批量", "向量化"],
+    "expected_knowledge_points": ["向量化", "批处理"],
+    "key_answer_points": ["一次调用", "GPU", "吞吐"],
+    "forbidden_conclusions": []
+  }
+]

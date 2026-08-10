@@ -1,0 +1,166 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6fa;
+  color: #1f2430;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+header h1 {
+  font-size: 20px;
+}
+
+header nav a {
+  color: #4a6cf7;
+  text-decoration: none;
+  margin-right: 14px;
+  font-size: 14px;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.card h2 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+textarea,
+input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d4d9e2;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+textarea:focus,
+input:focus {
+  outline: 2px solid #4a6cf7;
+  outline-offset: -1px;
+}
+
+button {
+  background: #4a6cf7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #3a5cd9;
+}
+
+button:disabled {
+  background: #b9c2d8;
+  cursor: not-allowed;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.row input {
+  flex: 1;
+}
+
+.muted {
+  color: #6b7480;
+  font-size: 13px;
+}
+
+.answer {
+  white-space: pre-wrap;
+  background: #f8f9fc;
+  border: 1px solid #eef0f5;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.sources {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #4a6cf7;
+}
+
+.blink::after {
+  content: "▋";
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eef0f5;
+}
+
+th {
+  color: #6b7480;
+  font-weight: 600;
+}
+
+.badge {
+  display: inline-block;
+  background: #eef2ff;
+  color: #4a6cf7;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  margin: 2px 4px 2px 0;
+}
+
+.error {
+  color: #d64545;
+  font-size: 13px;
+  margin-top: 8px;
+}
