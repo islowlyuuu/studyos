@@ -50,6 +50,7 @@
 | 缓存 | 相同问题在 TTL 内直接命中 Redis，降低模型调用成本 |
 | 练习与批改 | 基于知识库自动出题（JSON Schema 结构化输出）→ 提交答案 → 分维度打分 + 薄弱知识点标记 |
 | Agent | Function Calling 工具编排（`record_mistake` / `update_mastery` / `create_study_plan`），参数 Pydantic 校验，状态持久化到 PG，最大步数 + 超时保护 |
+| MCP Server | 把同一套 Agent 工具暴露为标准 MCP 协议（`tools/list` / `tools/call`），任何支持 MCP 的客户端（如 Claude Code）可直接调用 |
 | 评测 | 固定 20 题评测集，计算 Recall@K / MRR / 引用正确率 / 完整性；每次模型调用记录 token、延迟、估算成本 |
 
 ## 快速开始
@@ -95,6 +96,48 @@ npm run dev                     # http://localhost:3000
 1. 打开 `http://localhost:3000/upload`，上传一份 Markdown 学习资料，等状态变为 `done`
 2. 打开 `/qa`，提问（SSE 流式展示 + 来源引用）
 3. 打开 `/practice`，输入主题出题 → 作答 → 结构化批改
+
+## MCP Server
+
+StudyOS 把 `record_mistake` / `update_mastery` / `create_study_plan` 三个工具同时以两条路径暴露：
+- **Function Calling**：项目自带 `/api/agent/run` 的 Agent 循环使用；
+- **MCP**：`backend/app/mcp_server.py` 用官方 `mcp` SDK 封装为标准协议，任何支持 MCP 的客户端可接入。
+
+`tools/list` 返回的参数定义与 Function Calling 路径一致（同一套参数模型），工具执行复用同一持久化逻辑。
+
+### 启动 Server
+
+```bash
+cd backend
+.venv\Scripts\python.exe -m app.mcp_server        # 默认 stdio 传输
+```
+
+### 用支持 MCP 的客户端连接
+
+例如 Claude Code 或 Claude Desktop 把 StudyOS 配成 stdio MCP server：
+
+```json
+{
+  "mcpServers": {
+    "studyos": {
+      "command": "D:\\Myknowledge\\studyos\\backend\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "app.mcp_server"],
+      "cwd": "D:\\Myknowledge\\studyos\\backend"
+    }
+  }
+}
+```
+
+### 与 Function Calling 的关系
+
+Function Calling 是模型在 API 层的能力（模型能输出结构化工具调用）；MCP 是工具定义与调用的通信标准。MCP Server 暴露的工具定义经客户端塞给模型后，最终仍是模型的 Function Calling 能力在驱动；两者是"能力"与"标准"的关系，不是替代。
+
+### 自测
+
+```bash
+cd backend
+.venv\Scripts\python.exe test_mcp.py     # initialize / tools/list / tools/call 合法与非法参数
+```
 
 ## API 一览
 
