@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import JSON, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.config import settings
@@ -30,9 +30,26 @@ class SourceDocument(Base):
     storage_path: Mapped[str] = mapped_column(String(500), default="")
     parse_status: Mapped[str] = mapped_column(String(20), default="pending")  # pending/parsing/done/failed
     parser_version: Mapped[str] = mapped_column(String(50), default="v1")
+    content_hash: Mapped[str] = mapped_column(String(64), default="", index=True)
+    logical_key: Mapped[str] = mapped_column(String(36), default="", index=True)
+    version: Mapped[int] = mapped_column(Integer, default=1)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True, index=True)
+    cancel_requested: Mapped[bool] = mapped_column(Boolean, default=False)
+    chunker_version: Mapped[str] = mapped_column(String(50), default="heading-v1")
+    embedding_model: Mapped[str] = mapped_column(String(255), default="")
+    indexed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 
     chunks = relationship("DocumentChunk", back_populates="document", cascade="all, delete-orphan")
+
+
+class KnowledgeBaseState(Base):
+    __tablename__ = "knowledge_base_states"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True)
+    generation: Mapped[int] = mapped_column(Integer, default=1)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now, onupdate=_now)
 
 
 class DocumentChunk(Base):
@@ -49,6 +66,19 @@ class DocumentChunk(Base):
     metadata_: Mapped[dict] = mapped_column("metadata", JSON, default=dict)
 
     document = relationship("SourceDocument", back_populates="chunks")
+
+
+class EvaluationRun(Base):
+    __tablename__ = "evaluation_runs"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    dataset_version: Mapped[str] = mapped_column(String(100), default="")
+    corpus_snapshot: Mapped[dict] = mapped_column(JSON, default=dict)
+    retrieval_config: Mapped[dict] = mapped_column(JSON, default=dict)
+    report: Mapped[dict] = mapped_column(JSON, default=dict)
+    status: Mapped[str] = mapped_column(String(20), default="completed")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_now)
 
 
 class KnowledgePoint(Base):

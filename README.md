@@ -67,6 +67,18 @@ cd studyos
 docker compose up -d
 ```
 
+默认把 PostgreSQL 映射到宿主机 `15432`，避免和 Windows 已安装的 PostgreSQL `5432` 冲突；Redis 映射到 `6379`。如果本机没有端口冲突，也可以在启动前设置 `POSTGRES_HOST_PORT=5432`。
+
+如果 Docker CLI 只安装在 WSL Ubuntu 中：
+
+```bash
+wsl -d Ubuntu
+sudo service docker start                  # 如果 daemon 尚未启动
+sudo usermod -aG docker $USER              # 当前用户没有 docker.sock 权限时执行一次
+exit                                       # 重新打开 WSL 使用户组生效
+wsl -d Ubuntu -- docker compose -f /mnt/d/Myknowledge/studyos/docker-compose.yml up -d
+```
+
 ### 2. 启动后端
 
 ```bash
@@ -77,6 +89,7 @@ pip install -r requirements.txt
 
 copy .env.example .env          # 填入 DEEPSEEK_API_KEY
 # 如首次建库表结构有变化：python migrate.py
+# 若使用默认 Compose 端口，.env 中 DATABASE_URL 的端口应为 15432
 
 # 两个终端，分别跑：
 .venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000   # API
@@ -184,3 +197,28 @@ studyos/
 ├── frontend/              # Next.js (upload/qa/practice)
 └── docker-compose.yml     # PostgreSQL(pgvector) + Redis
 ```
+
+## 知识库治理与真实语料评测
+
+资料以“逻辑资料 + 版本”管理：相同内容会直接返回已有资料；替换会先完成新版本索引，再把它切为活动版本；删除或取消中的资料不会再参与检索、引用、练习或问答缓存。问答缓存同时绑定用户、知识库世代、检索深度和 embedding 模型，资料变更后旧回答不会命中。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| POST | `/api/documents/{id}/replace` | 上传新版本，索引成功后原子替换活动版本 |
+| GET | `/api/documents/{id}` | 返回资料版本、状态、内容指纹与索引来源 |
+| DELETE | `/api/documents/{id}` | 取消/停用资料并使其退出检索 |
+
+真实资料准备步骤：
+
+1. 导入实际的 AI 学习笔记、PDF 和项目代码/文档。
+2. 复制 `backend/eval/ai_corpus_eval_template.json` 为新的评测集，逐题人工填写活动资料的 `logical_key`、`version`、相关 `chunk_ids`、章节/页码、答案要点和禁止结论。
+3. 至少人工复核 20 题；若资料中同时有 PDF 与项目文档，评测集应覆盖两类资料。
+4. 先校验，再运行正式评测：
+
+```bash
+cd backend
+.venv\Scripts\python.exe run_eval.py --corpus eval\ai_corpus_eval.json --validate-only
+.venv\Scripts\python.exe run_eval.py --corpus eval\ai_corpus_eval.json
+```
+
+正式评测会保存语料/索引/检索配置快照，并按题输出 Recall@K、MRR、引用正确性、引用完整性和失败分类。未达到 20 题或存在无效来源时会返回“not ready”，不会把它作为正式质量结论。

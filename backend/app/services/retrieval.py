@@ -22,6 +22,7 @@ def retrieve(query: str, top_k: int | None = None, user_id: int | None = None) -
             .order_by(dist)
             .limit(k)
         )
+        stmt = stmt.where(SourceDocument.parse_status == "done", SourceDocument.is_active.is_(True), SourceDocument.cancel_requested.is_(False))
         if user_id is not None:
             stmt = stmt.where(SourceDocument.user_id == user_id)
         rows = db.execute(stmt).all()

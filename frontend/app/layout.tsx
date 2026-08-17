@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "StudyOS · 个人 AI 学习工作台",
-  description: "上传资料 → 建立知识库 → 带引用问答 → 出题 → 批改",
+  title: "StudyOS · 个人学习工作台",
+  description: "整理资料、核对出处，通过练习建立自己的知识体系。",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -1,0 +1,19 @@
+﻿{
+  "version": "ai-corpus-v1",
+  "instructions": "先导入真实资料，再按每题填写人工复核的来源、片段和答案要点。预期 logical_key、version 与 chunk id 可从资料详情和数据库查询获得。",
+  "items": [
+    {
+      "id": "example-001",
+      "question": "替换成来自真实 AI 学习资料的问题",
+      "topic": "rag",
+      "expected_logical_key": "填入资料 logical_key",
+      "expected_version": 1,
+      "expected_chunk_ids": [0],
+      "expected_source": {"filename": "资料文件名.pdf", "heading_path": "章节路径", "page_number": 1},
+      "key_answer_points": ["关键点一", "关键点二"],
+      "forbidden_conclusions": ["资料未支持的结论"],
+      "reviewed_by": "你的姓名",
+      "reviewed_at": "2026-08-17"
+    }
+  ]
+}

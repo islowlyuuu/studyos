@@ -5,12 +5,14 @@ from app.config import settings
 from app.llm.client import chat, stream_chat
 from app.services.queue import get_redis
 from app.services.retrieval import retrieve
+from app.services.governance import cache_namespace
 
 CACHE_PREFIX = "studyos:qa:"
 
 
-def _cache_key(query: str) -> str:
-    return CACHE_PREFIX + hashlib.md5(query.encode("utf-8")).hexdigest()
+def _cache_key(query: str, user_id: int | None) -> str:
+    normalized = " ".join(query.split())
+    return f"{CACHE_PREFIX}{cache_namespace(user_id or 1)}:" + hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
 def _similarity(distance: float) -> float:
@@ -24,6 +26,7 @@ def _sources(chunks):
             {
                 "index": i,
                 "chunk_id": chunk.id,
+                "document_id": chunk.document_id,
                 "content": chunk.content,
                 "heading_path": chunk.heading_path,
                 "page_number": chunk.page_number,
@@ -56,7 +59,7 @@ def _insufficient() -> dict:
 
 def answer_question(query: str, user_id: int | None = None) -> dict:
     r = get_redis()
-    key = _cache_key(query)
+    key = _cache_key(query, user_id)
     cached = r.get(key)
     if cached:
         data = json.loads(cached)
@@ -87,7 +90,7 @@ def answer_question(query: str, user_id: int | None = None) -> dict:
 def stream_answer(query: str, user_id: int | None = None):
     """SSE 生成器：先发 meta（来源），再逐段发 delta，最后发 done。"""
     r = get_redis()
-    key = _cache_key(query)
+    key = _cache_key(query, user_id)
 
     cached = r.get(key)
     if cached:
